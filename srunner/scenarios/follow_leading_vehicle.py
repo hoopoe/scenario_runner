@@ -24,7 +24,8 @@ from srunner.scenariomanager.atomic_scenario_behavior import *
 from srunner.scenariomanager.atomic_scenario_criteria import *
 from srunner.scenariomanager.timer import TimeOut
 from srunner.scenarios.basic_scenario import *
-
+from srunner.scenarios.scenario_helper import get_location_in_distance
+from srunner.scenarios.config_parser import ActorConfigurationData
 
 FOLLOW_LEADING_VEHICLE_SCENARIOS = [
     "FollowLeadingVehicle",
@@ -39,28 +40,41 @@ class FollowLeadingVehicle(BasicScenario):
     scenario involving two vehicles.
     """
 
-    category = "FollowLeadingVehicle"
-
-    timeout = 120            # Timeout of scenario in seconds
-
-    # ego vehicle parameters
-    _ego_max_velocity_allowed = 20        # Maximum allowed velocity [m/s]
-    _ego_avg_velocity_expected = 4        # Average expected velocity [m/s]
-    _ego_other_distance_start = 4         # time to arrival that triggers scenario starts
-
-    # other vehicle
-    _other_actor_max_brake = 1.0                  # Maximum brake of other actor
-    _other_actor_stop_in_front_intersection = 30  # Stop ~30m in front of intersection
-
-    def __init__(self, world, ego_vehicle, config, randomize=False, debug_mode=False):
+    def __init__(self, world, ego_vehicle, other_actors, town, randomize=False, debug_mode=False, config=None):
         """
         Setup all relevant parameters and create scenario
 
         If randomize is True, the scenario parameters are randomized
         """
+
+        self.category = "FollowLeadingVehicle"
+
+        self.timeout = 120            # Timeout of scenario in seconds
+
+        # ego vehicle parameters
+        self._ego_max_velocity_allowed = 20        # Maximum allowed velocity [m/s]
+        self._ego_avg_velocity_expected = 4        # Average expected velocity [m/s]
+        self._ego_other_distance_start = 4         # time to arrival that triggers scenario starts
+
+        # other vehicle
+        self._other_actor_max_brake = 1.0                  # Maximum brake of other actor
+        self._other_actor_stop_in_front_intersection = 30  # Stop ~30m in front of intersection
+
+        parameter_list = []
+
+        #   Other vehicle 1
+        model = 'vehicle.tesla.model3'
+        spawn_location, _ = get_location_in_distance(ego_vehicle, 50)
+        spawn_location.z = 40
+        spawn_transform = carla.Transform(
+            spawn_location,
+            ego_vehicle.get_transform().rotation)
+        parameter_list.append(ActorConfigurationData(model, spawn_transform))
+
         super(FollowLeadingVehicle, self).__init__("FollowVehicle",
                                                    ego_vehicle,
-                                                   config,
+                                                   parameter_list,
+                                                   town,
                                                    world,
                                                    debug_mode)
 
