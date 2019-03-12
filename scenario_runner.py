@@ -49,7 +49,7 @@ SCENARIOS = {
     "NoSignalJunction": NO_SIGNAL_JUNCTION_SCENARIOS,
     "VehicleTurning": VEHICLE_TURNING_SCENARIOS,
     "ControlLoss": CONTROL_LOSS_SCENARIOS,
-    "VehicleTurnLeftAtJunction": TURN_LEFT_JUNCTION_SCENARIOS
+    "SignalizedJunctionLeftTurn": TURN_LEFT_SIGNALIZED_JUNCTION_SCENARIOS
 }
 
 
