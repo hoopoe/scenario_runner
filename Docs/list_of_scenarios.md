@@ -53,3 +53,7 @@ to avoid collision and navigate accross the junction to succeed.
 In this scenario control loss of a vehicle is tested due to bad road conditions, etc
 and it checks whether the vehicle is regained its control and corrected its course.
 
+### SignalizedJunctionLeftTurn
+In this scenario hero vehicle is turning left in an urban area,
+at a signalized intersection and cuts across the path of another vehicle
+coming straight crossing from an opposite direction.
