@@ -37,7 +37,7 @@ class FollowLeadingVehicle(BasicScenario):
 
     """
     This class holds everything required for a simple "Follow a leading vehicle"
-    scenario involving two vehicles.
+    scenario involving two vehicles. Scenario 2
     """
 
     def __init__(self, world, ego_vehicle, other_actors, town, randomize=False, debug_mode=False, config=None):
