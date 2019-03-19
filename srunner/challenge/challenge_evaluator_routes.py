@@ -24,11 +24,8 @@ import xml.etree.ElementTree as ET
 
 import carla
 import srunner.challenge.utils.route_configuration_parser as parser
-from srunner.challenge.envs.server_manager import ServerManagerBinary, ServerManagerDocker
 from srunner.challenge.envs.sensor_interface import CallBack, CANBusSensor, HDMapReader
-#from srunner.scenarios.challenge_basic import *
-#from srunner.scenarios.config_parser import *
-#from srunner.scenariomanager.scenario_manager import ScenarioManager
+
 
 from srunner.scenariomanager.carla_data_provider import CarlaActorPool
 
@@ -89,19 +86,19 @@ class ChallengeEvaluator(object):
     Provisional code to evaluate AutonomousAgent performance
     """
 
-    ego_vehicle = None
-    actors = []
-
-    # Tunable parameters
-    client_timeout = 15.0   # in seconds
-    wait_for_world = 10.0  # in seconds
-
-    # CARLA world and scenario handlers
-    world = None
-    manager = None
-    agent_instance = None
-
     def __init__(self, args):
+        self.ego_vehicle = None
+        self.actors = []
+
+        # Tunable parameters
+        self.client_timeout = 15.0  # in seconds
+        self.wait_for_world = 10.0  # in seconds
+
+        # CARLA world and scenario handlers
+        self.world = None
+        self.manager = None
+        self.agent_instance = None
+
         self.output_scenario = []
         self.master_scenario = None
         # first we instantiate the Agent
@@ -114,12 +111,6 @@ class ChallengeEvaluator(object):
         self._sensors_list = []
         self._hop_resolution = 2.0
 
-        # instantiate a CARLA server manager
-        if args.use_docker:
-            self._carla_server = ServerManagerDocker({'DOCKER_VERSION': args.docker_version})
-
-        else:
-            self._carla_server = ServerManagerBinary({'CARLA_SERVER': "{}/CarlaUE4.sh".format(args.carla_root)})
 
     def cleanup(self, ego=False):
         """
@@ -154,9 +145,6 @@ class ChallengeEvaluator(object):
         if self.world is not None:
             del self.world
 
-        self._carla_server.stop()
-
-
     def prepare_ego_car(self, start_transform):
         """
         Spawn or update all scenario actors according to
@@ -171,6 +159,7 @@ class ChallengeEvaluator(object):
         else:
             self.ego_vehicle.set_transform(start_transform)
 
+        import pdb; pdb.set_trace()
         # setup sensors
         self.setup_sensors(self.agent_instance.sensors(), self.ego_vehicle)
 
@@ -428,11 +417,6 @@ class ChallengeEvaluator(object):
         """
         Run all routes according to provided commandline args
         """
-        """
-            The world needs to be running
-        """
-        self._carla_server.reset(args.host, args.port)
-        self._carla_server.wait_until_ready()
 
         # retrieve worlds annotations
         world_annotations = parser.parse_annotations_file(args.scenarios)
@@ -493,9 +477,6 @@ class ChallengeEvaluator(object):
             self.agent_instance.destroy()
             # statistics recording
             result, final_score, return_message = self.summary_route_performance()
-
-        # stop CARLA server
-        self._carla_server.stop()
 
         # final measurements from the challenge
         self.final_challenge_statistics()

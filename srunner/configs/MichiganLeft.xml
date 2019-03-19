@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<scenarios>
+    <scenario name="MichiganLeft" type="MichiganLeft" town="Michigan_Left">
+        <ego_vehicle x="11.3" y="176.6" z="0.5" yaw="-90" model="vehicle.lincoln.mkz2017" />
+    </scenario>
+</scenarios>
