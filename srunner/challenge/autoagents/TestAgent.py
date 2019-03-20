@@ -6,7 +6,7 @@ import carla
 
 from srunner.challenge.autoagents.autonomous_agent import AutonomousAgent
 
-class DummyAgent(AutonomousAgent):
+class TestAgent(AutonomousAgent):
     def setup(self, path_to_conf_file):
         pass
 
@@ -53,8 +53,7 @@ class DummyAgent(AutonomousAgent):
                 print("[{} -- {:06d}] with shape {}".format(key, val[0], shape))
                 if key == 'Center':
                   filepath = '/opt/Work/out/{}_{:06d}.png'.format(key, val[0])
-                  image =-np.moveaxis(val[1], 0, 2)
-                  cv2.imwrite(filepath, image)
+                  cv2.imwrite(filepath, val[1][:,:,::-1])
         print("<=====================")
 
         # DO SOMETHING SMART
@@ -63,7 +62,7 @@ class DummyAgent(AutonomousAgent):
         # RETURN CONTROL
         control = carla.VehicleControl()
         control.steer = 0.0
-        control.throttle = 1.2
+        control.throttle = 1.0
         control.brake = 0.0
         control.hand_brake = False
 
