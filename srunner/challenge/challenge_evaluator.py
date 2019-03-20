@@ -26,6 +26,7 @@ from agents.navigation.local_planner import RoadOption
 from srunner.challenge.envs.server_manager import ServerManagerBinary, ServerManagerDocker
 from srunner.challenge.envs.sensor_interface import CallBack, Speedometer, HDMapReader
 from srunner.scenarios.challenge_basic import *
+from srunner.scenarios.follow_leading_vehicle import *
 from srunner.scenarios.config_parser import *
 from srunner.scenariomanager.scenario_manager import ScenarioManager
 
